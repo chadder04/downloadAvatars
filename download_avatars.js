@@ -39,7 +39,6 @@ function getRepoContributors(inputOwner, inputRepo) {
         if (!error && response.statusCode == 200) {
             let jsonData = JSON.parse(body);
             for (index in jsonData) {
-                console.log(' ' + jsonData[index].login + ' : ' + jsonData[index].avatar_url);
                 downloadImageByURL(jsonData[index].avatar_url, jsonData[index].login);
             }
         } else {
@@ -56,6 +55,7 @@ function downloadImageByURL(url, saveName) {
     fs.stat(fullPath, function (err, stats) {
         // console.log(err);
         // console.log(stats);
+        console.log(' ' + saveName + ' : ' + url);
         console.log(`  * Downloading avatar ${saveName}.png from ${url}`);
         if (err) {
             // Directory does not exist
@@ -72,7 +72,6 @@ function downloadImageByURL(url, saveName) {
         console.log(`  * File already exists, skipping download... : ${fullPath}`);
         return true;
     });
-    
     return true;
 }
 
