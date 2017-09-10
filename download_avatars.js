@@ -2,14 +2,14 @@ var fs = require('fs');
 var request = require('request');
 
 function verifyDirectory(dir) {
-    console.log(`Verifying existance of ${dir} directory...`);
+    console.log(`====== Verifying existance of ${dir} directory...`);
     fs.stat(dir, function (err, stats) {
         if (err) {
             // Directory does not exist
             if (err.code === 'ENOENT') {
                 // Create new avatars directory
                 fs.mkdir(dir, function () {
-                    console.log("Directory did not exist - created directory - avatars...");
+                    console.log(" * Directory did not exist - created directory - avatars...");
                 });
             } else {
                 // Error output goes here
@@ -17,7 +17,7 @@ function verifyDirectory(dir) {
             }
             return false;
         }
-        console.log(dir + " directory already exists!...")
+        console.log(" * " + dir + " directory already exists!...")
         return true;
     });
 }
@@ -33,8 +33,8 @@ function getRepoContributors(inputOwner, inputRepo) {
     };
 
     function callback(error, response, body) {
-        if (!inputOwner && !inputRepo) { console.log("Missing required input arguments! :owner :repo"); return false; }        
-        console.log("Getting repo contributor data from Github.com...");
+        if (!inputOwner && !inputRepo) { console.log("ERROR: Missing required input arguments! :owner :repo"); return false; }
+        console.log("====== Getting repo contributor data from Github.com...");
 
         if (!error && response.statusCode == 200) {
             let jsonData = JSON.parse(body);
@@ -52,8 +52,27 @@ function getRepoContributors(inputOwner, inputRepo) {
 }
 
 function downloadImageByURL(url, saveName) {
-    request(url).pipe(fs.createWriteStream('avatars/' + saveName + '.png'))
-    console.log(`  Downloading avatar ${saveName}.png from ${url}`);
+    var fullPath = 'avatars/' + saveName + '.png';
+    fs.stat(fullPath, function (err, stats) {
+        // console.log(err);
+        // console.log(stats);
+        console.log(`  * Downloading avatar ${saveName}.png from ${url}`);
+        if (err) {
+            // Directory does not exist
+            if (err.code === 'ENOENT') {
+                // Create new avatars directory
+                request(url).pipe(fs.createWriteStream(fullPath));
+                console.log('  * Created new file : ' + fullPath);
+            } else {
+                // Error output goes here
+                console.log(err);
+            }
+            return false;
+        }
+        console.log(`  * File already exists, skipping download... : ${fullPath}`);
+        return true;
+    });
+    
     return true;
 }
 
