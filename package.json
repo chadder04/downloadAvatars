@@ -1,0 +1,22 @@
+{
+  "name": "downloadavatars",
+  "version": "1.0.0",
+  "description": "",
+  "main": "download_avatars.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chadder04/downloadAvatars.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chadder04/downloadAvatars/issues"
+  },
+  "homepage": "https://github.com/chadder04/downloadAvatars#readme",
+  "dependencies": {
+    "request": "^2.81.0"
+  }
+}
