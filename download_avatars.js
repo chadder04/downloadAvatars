@@ -1,5 +1,6 @@
-var fs = require('fs');
-var request = require('request');
+require('dotenv').config();
+const fs = require('fs');
+const request = require('request');
 
 function verifyDirectory(dir) {
     console.log(`====== Verifying existance of ${dir} directory...`);
@@ -23,18 +24,19 @@ function verifyDirectory(dir) {
 }
 
 function getRepoContributors(inputOwner, inputRepo) {
-    var jsonDataURL = `https://api.github.com/repos/${inputOwner}/${inputRepo}/contributors`;
+    var requestURL = `https://${process.env.GITHUB_USER}:${process.env.GITHUB_TOKEN}@api.github.com/repos/${inputOwner}/${inputRepo}/contributors`;
     var repoContributorData = {};
     var options = {
-        url: jsonDataURL,
+        url: requestURL,
         headers: {
             'User-Agent': 'request'
         }
     };
 
     function callback(error, response, body) {
-        if (!inputOwner && !inputRepo) { console.log("ERROR: Missing required input arguments! :owner :repo"); return false; }
+        if (!inputOwner || !inputRepo) { console.log("ERROR: Missing required input arguments! :owner :repo"); return false; }
         console.log("====== Getting repo contributor data from Github.com...");
+        console.log(requestURL);
 
         if (!error && response.statusCode == 200) {
             let jsonData = JSON.parse(body);
